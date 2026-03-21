@@ -20,15 +20,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: project-CI-CD
 
       - name: Run tests
         run: npm test
-        working-directory: project-CI-CD
 
       - name: Build Docker image
         run: docker build -t profile-update:latest .
-        working-directory: project-CI-CD
 
       - name: Run Docker container smoke test
         run: |
