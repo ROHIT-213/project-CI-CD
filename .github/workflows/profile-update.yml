@@ -1,0 +1,38 @@
+name: Running the CI for profile update
+on: 
+  push:
+    branches:
+      - ci-branch
+  pull_request:
+    branches:
+      - ci-branch
+jobs:
+  build:
+    runs-on: ubuntu-latest #this the temp container like pod git hub action will create to run the ci
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: project-CI-CD
+
+      - name: Run tests
+        run: npm test
+        working-directory: project-CI-CD
+
+      - name: Build Docker image
+        run: docker build -t profile-update:latest .
+        working-directory: project-CI-CD
+
+      - name: Run Docker container smoke test
+        run: |
+          docker run -d -p 3000:3000 --name profile-app profile-update:latest
+          sleep 3
+          curl -f http://localhost:3000/profile
+          docker stop profile-app
