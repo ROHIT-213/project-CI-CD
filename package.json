@@ -1,5 +1,5 @@
 {
-  "name": "profile-update",
+  "name": "@project-ci-cd/profile-update",
   "version": "1.0.0",
   "description": "Profile update REST API",
   "main": "src/index.js",

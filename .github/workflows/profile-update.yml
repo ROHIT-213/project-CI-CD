@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest #this the temp container like pod git hub action will create to run the ci
+    timeout-minutes: 15
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -33,3 +34,11 @@ jobs:
           sleep 3
           curl -f http://localhost:3000/profile
           docker stop profile-app
+      - name: Build Artifact
+        run: npm run build
+
+      - name: upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: dist/
