@@ -31,6 +31,7 @@ jobs:
 
       - name: Run Docker container smoke test
         run: |
+          docker rm -f profile-app || true
           docker run -d -p 3000:3000 --name profile-app profile-update:latest
           sleep 3
           curl -f http://localhost:3000/profile
