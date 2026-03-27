@@ -10,22 +10,17 @@ jobs:
     runs-on: self-hosted
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: Update the packages
-        run: sudo apt update -y
+      - name: Install pm2
+        run: sudo npm install -g pm2
 
-      - name: Install nodejs and npm
-        run: sudo apt install nodejs npm -y
+      - name: Stop existing app
+        run: pm2 stop profile-app || true
 
-      - name: Download the artifacts from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifact
-          path: ./build-artifact
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Start app
+        run: pm2 start /home/ubuntu/actions-runner/_work/project-CI-CD/project-CI-CD/dist/src/index.js --name profile-app
 
-      - name: List downloaded files
-        run: ls ./app-artifact
+      - name: Save pm2 process list
+        run: pm2 save
 
       - name: Deployment completed
         run: echo "Deployment completed successfully"
