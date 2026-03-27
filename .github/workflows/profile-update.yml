@@ -28,4 +28,4 @@ jobs:
         run: ls ./build-artifact
 
       - name: Deployment completed
-        run: echo "Deployment completed successfully"
+        run: echo "Deployment completed "
