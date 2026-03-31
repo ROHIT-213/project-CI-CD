@@ -30,6 +30,8 @@ jobs:
 
       - name: Run Docker container smoke test
         run: |
+          pm2 stop profile-app || true
+          sudo fuser -k 3000/tcp || true
           docker rm -f profile-app || true
           docker run -d -p 3000:3000 --name profile-app profile-update:latest
           sleep 3
