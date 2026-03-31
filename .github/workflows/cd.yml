@@ -10,8 +10,13 @@ jobs:
     runs-on: self-hosted
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: Install pm2
-        run: sudo npm install -g pm2
+      - name: Install Node.js and pm2
+        run: |
+          if ! command -v npm &> /dev/null; then
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt install -y nodejs
+          fi
+          sudo npm install -g pm2
 
       - name: Stop existing app
         run: pm2 stop profile-app || true
