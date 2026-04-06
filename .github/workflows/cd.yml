@@ -18,8 +18,14 @@ jobs:
           fi
           sudo npm install -g pm2
 
+      - name: Install app dependencies
+        run: cd /home/ubuntu/actions-runner/_work/project-CI-CD/project-CI-CD && npm install --production
+
       - name: Start or restart app
-        run: pm2 start /home/ubuntu/actions-runner/_work/project-CI-CD/project-CI-CD/dist/src/index.js --name profile-app
+        run: |
+          pm2 describe profile-app > /dev/null 2>&1 \
+            && pm2 restart profile-app \
+            || pm2 start /home/ubuntu/actions-runner/_work/project-CI-CD/project-CI-CD/dist/src/index.js --name profile-app
 
       - name: Save pm2 process list
         run: pm2 save
